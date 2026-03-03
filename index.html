@@ -644,6 +644,8 @@
                                         <option value="azure">Azure OpenAI</option>
                                         <option value="ollama">Ollama (本地)</option>
                                         <option value="moonshot">Moonshot (月之暗面)</option>
+                                        <option value="minimax">MiniMax</option>
+                                        <option value="kimi">Kimi (Moonshot AI)</option>
                                     </select>
                                 </div>
 
@@ -745,6 +747,8 @@ llm:
                     <div class="feature-item">Claude 3.5</div>
                     <div class="feature-item">通义千问 Qwen</div>
                     <div class="feature-item">DeepSeek</div>
+                    <div class="feature-item">MiniMax</div>
+                    <div class="feature-item">Kimi</div>
                     <div class="feature-item">Azure OpenAI</div>
                     <div class="feature-item">Ollama 本地</div>
                 </div>
@@ -970,6 +974,15 @@ llm:
                 { value: 'moonshot-v1-8k', text: 'Moonshot V1 8K (推荐)' },
                 { value: 'moonshot-v1-32k', text: 'Moonshot V1 32K' },
                 { value: 'moonshot-v1-128k', text: 'Moonshot V1 128K' }
+            ],
+            minimax: [
+                { value: 'abab6.5s-chat', text: 'abab6.5s-chat (推荐)' },
+                { value: 'abab6.5g-chat', text: 'abab6.5g-chat' },
+                { value: 'abab6-chat', text: 'abab6-chat' }
+            ],
+            kimi: [
+                { value: 'kimi-latest', text: 'Kimi (推荐)' },
+                { value: 'kimi-k2', text: 'Kimi K2' }
             ]
         };
 
@@ -987,7 +1000,7 @@ llm:
         // 显示/隐藏 Base URL
         function updateBaseUrlVisibility() {
             const provider = document.getElementById('llmProvider').value;
-            const showBaseUrl = ['azure', 'ollama'].includes(provider);
+            const showBaseUrl = ['azure', 'ollama', 'minimax', 'kimi'].includes(provider);
             document.getElementById('baseUrlGroup').style.display = showBaseUrl ? 'block' : 'none';
         }
 
@@ -1023,7 +1036,7 @@ llm:
   model: ${model}`;
 
             // 添加 base_url
-            if (baseUrl && ['azure', 'ollama'].includes(provider)) {
+            if (baseUrl && ['azure', 'ollama', 'minimax', 'kimi'].includes(provider)) {
                 config += `
   base_url: ${baseUrl}`;
             }
