@@ -6,16 +6,18 @@
     <title>OpenClaw & 有道龙虾 安装配置指南</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
             --success: #10b981;
             --warning: #f59e0b;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --card-bg-light: #334155;
+            --text: #f1f5f9;
+            --text-light: #94a3b8;
+            --border: #475569;
+            --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3);
         }
 
         * {
@@ -29,63 +31,90 @@
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
+            min-height: 100vh;
+            background-image:
+                radial-gradient(ellipse at top, #1e1b4b 0%, transparent 50%),
+                radial-gradient(ellipse at bottom right, #312e81 0%, transparent 50%);
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
 
         header {
             text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 20px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.3);
             color: white;
-            border-radius: 16px;
+            border-radius: 24px;
             margin-bottom: 30px;
+            backdrop-filter: blur(10px);
         }
 
         header h1 {
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #a5b4fc 0%, #c4b5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         header p {
-            opacity: 0.9;
-            font-size: 1.1rem;
+            opacity: 0.85;
+            font-size: 1.2rem;
+            color: #c7d2fe;
         }
 
         .tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 24px;
+            background: var(--card-bg);
+            padding: 8px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
         }
 
         .tab-btn {
             flex: 1;
-            padding: 16px 24px;
+            padding: 18px 24px;
             border: none;
-            background: var(--card-bg);
+            background: transparent;
             border-radius: 12px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .tab-btn.active {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
             color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
         }
 
         .tab-btn:hover:not(.active) {
-            background: #f1f5f9;
+            background: var(--card-bg-light);
+            color: var(--text);
         }
 
         .content {
             display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .content.active {
@@ -94,96 +123,189 @@
 
         .card {
             background: var(--card-bg);
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 20px;
+            padding: 28px;
             margin-bottom: 20px;
             box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3);
         }
 
         .card h2 {
-            color: var(--primary);
+            background: linear-gradient(135deg, #a5b4fc 0%, #c4b5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 16px;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .card h3 {
-            margin: 20px 0 12px;
-            font-size: 1.1rem;
+            margin: 24px 0 14px;
+            font-size: 1.15rem;
             color: var(--text);
+            border-left: 3px solid var(--primary);
+            padding-left: 12px;
         }
 
         .card p {
             color: var(--text-light);
-            margin-bottom: 12px;
+            margin-bottom: 14px;
+            font-size: 1rem;
+        }
+
+        .card a {
+            color: var(--primary-light);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .card a:hover {
+            color: #c4b5fd;
+        }
+
+        .install-method {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .install-method {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .method-card {
+            background: var(--card-bg-light);
+            border-radius: 16px;
+            padding: 20px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .method-card:hover {
+            border-color: var(--primary);
+        }
+
+        .method-card.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .method-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .method-card p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
         }
 
         .step {
             display: flex;
             gap: 16px;
             margin-bottom: 20px;
-            padding: 16px;
-            background: #f8fafc;
-            border-radius: 12px;
+            padding: 20px;
+            background: var(--card-bg-light);
+            border-radius: 14px;
             border-left: 4px solid var(--primary);
+            transition: transform 0.2s;
+        }
+
+        .step:hover {
+            transform: translateX(4px);
         }
 
         .step-num {
-            width: 32px;
-            height: 32px;
-            background: var(--primary);
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
             color: white;
-            border-radius: 50%;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             flex-shrink: 0;
+            font-size: 1.1rem;
         }
 
         .step-content h4 {
             margin-bottom: 8px;
             color: var(--text);
+            font-size: 1.05rem;
         }
 
         .step-content p {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-size: 0.95rem;
         }
 
         code {
-            background: #1e293b;
-            color: #a5f3fc;
-            padding: 2px 8px;
-            border-radius: 4px;
+            background: #0f172a;
+            color: #22d3ee;
+            padding: 3px 10px;
+            border-radius: 6px;
             font-family: 'Consolas', 'Monaco', monospace;
             font-size: 0.9em;
+            border: 1px solid #334155;
         }
 
         pre {
-            background: #1e293b;
+            background: #0f172a;
             color: #e2e8f0;
-            padding: 16px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 12px;
             overflow-x: auto;
-            margin: 12px 0;
+            margin: 14px 0;
             font-size: 0.9rem;
+            border: 1px solid #334155;
         }
 
         pre code {
             background: none;
             padding: 0;
             color: inherit;
+            border: none;
+        }
+
+        .copy-btn {
+            float: right;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-dark);
         }
 
         .warning-box {
-            background: #fef3c7;
-            border: 1px solid #f59e0b;
-            padding: 16px;
-            border-radius: 8px;
-            margin: 16px 0;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            padding: 18px;
+            border-radius: 12px;
+            margin: 18px 0;
         }
 
         .warning-box::before {
@@ -191,11 +313,11 @@
         }
 
         .success-box {
-            background: #d1fae5;
-            border: 1px solid #10b981;
-            padding: 16px;
-            border-radius: 8px;
-            margin: 16px 0;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            padding: 18px;
+            border-radius: 12px;
+            margin: 18px 0;
         }
 
         .success-box::before {
@@ -203,47 +325,68 @@
         }
 
         .info-box {
-            background: #dbeafe;
-            border: 1px solid #2563eb;
-            padding: 16px;
-            border-radius: 8px;
-            margin: 16px 0;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.4);
+            padding: 18px;
+            border-radius: 12px;
+            margin: 18px 0;
         }
 
         .info-box::before {
             content: "ℹ️ ";
         }
 
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.3s;
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 16px 0;
         }
 
-        .btn:hover {
-            background: var(--primary-dark);
+        .feature-item {
+            background: var(--card-bg-light);
+            padding: 14px 18px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
         }
 
-        .btn-success {
-            background: var(--success);
-        }
-
-        .btn-success:hover {
-            background: #059669;
+        .feature-item::before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
         }
 
         footer {
             text-align: center;
-            padding: 30px;
+            padding: 40px 20px;
             color: var(--text-light);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+        }
+
+        footer a {
+            color: var(--primary-light);
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            color: var(--text-light);
+        }
+
+        li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary-light);
         }
 
         @media (max-width: 600px) {
@@ -252,7 +395,7 @@
             }
 
             header h1 {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
             }
 
             .container {
@@ -260,7 +403,7 @@
             }
 
             .card {
-                padding: 16px;
+                padding: 18px;
             }
         }
     </style>
@@ -283,103 +426,152 @@
                 <h2>🐙 什么是 OpenClaw？</h2>
                 <p>OpenClaw 是一个开源的 AI Agent 框架，可以本地部署，支持多种大语言模型连接。可通过 Docker 快速部署，支持飞书、钉钉等 IM 集成。</p>
 
+                <div class="feature-grid">
+                    <div class="feature-item">Docker 部署</div>
+                    <div class="feature-item">多模型支持</div>
+                    <div class="feature-item">飞书/钉钉集成</div>
+                    <div class="feature-item">免费开源</div>
+                </div>
+
                 <div class="warning-box">
                     <strong>环境要求：</strong>Docker Desktop (Windows/Mac) 或 Docker (Linux)，建议 4核8G 以上内存
                 </div>
             </div>
 
             <div class="card">
-                <h2>🚀 Docker 部署教程</h2>
+                <h2>⚡ 选择安装方式</h2>
 
-                <div class="step">
-                    <div class="step-num">1</div>
-                    <div class="step-content">
-                        <h4>安装 Docker Desktop</h4>
-                        <p>Windows 用户：下载并安装 <a href="https://www.docker.com/products/docker-desktop/" target="_blank">Docker Desktop</a></p>
-                        <p>安装完成后启动 Docker，确认图标显示运行中</p>
+                <div class="install-method">
+                    <div class="method-card selected" onclick="selectMethod('oneclick')">
+                        <h4>⚡ 一键脚本 (推荐)</h4>
+                        <p>Linux/Mac 一行命令自动安装，最简单</p>
+                    </div>
+                    <div class="method-card" onclick="selectMethod('docker')">
+                        <h4>🐳 Docker 部署</h4>
+                        <p>Windows/Mac/Linux 通用，需要配置</p>
                     </div>
                 </div>
 
-                <div class="step">
-                    <div class="step-num">2</div>
-                    <div class="step-content">
-                        <h4>创建配置文件</h4>
-                        <p>新建一个文件夹如 <code>openclaw</code>，在其中创建 <code>config.yaml</code> 文件：</p>
+                <!-- 一键安装脚本 -->
+                <div id="oneclick-install" style="display: block;">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <h4>运行一键安装脚本</h4>
+                            <p>在终端中执行以下命令：</p>
+<pre><code>curl -sL https://dl.openclaw.com/install.sh | sh</code></pre>
+                            <p>或使用 wget：</p>
+<pre><code>wget -qO- https://dl.openclaw.com/install.sh | sh</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <h4>按提示配置</h4>
+                            <p>脚本会自动提示你输入：</p>
+                            <ul>
+                                <li>API Key（选择模型服务商）</li>
+                                <li>飞书/钉钉配置（可选）</li>
+                                <li>管理员账号密码</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <h4>访问管理界面</h4>
+                            <p>安装完成后，打开浏览器访问 <code>http://localhost:8080</code></p>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <strong>🎉 完成！</strong> 默认管理员账号 admin/admin123
+                    </div>
+                </div>
+
+                <!-- Docker 安装 -->
+                <div id="docker-install" style="display: none;">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <h4>安装 Docker Desktop</h4>
+                            <p>Windows/Mac：<a href="https://www.docker.com/products/docker-desktop/" target="_blank">下载 Docker Desktop</a></p>
+                            <p>Linux：<code>curl -sL get.docker.com | sh</code></p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <h4>创建配置文件</h4>
+                            <p>新建文件夹 <code>openclaw</code>，创建 <code>config.yaml</code>：</p>
 <pre><code>server:
   host: 0.0.0.0
   port: 8080
 
-# 大模型配置 (选择一种)
 llm:
-  provider: openai  # 或 anthropic, azure, ollama 等
-  api_key: your-api-key-here
-  base_url: https://api.openai.com/v1  # 可选
+  provider: openai
+  api_key: your-api-key
   model: gpt-4o-mini
 
-# IM 集成配置 (可选)
 im:
-  type: feishu  # 或 dingtalk, telegram
+  type: feishu
   app_id: your-app-id
-  app_secret: your-app-secret
-  verification_token: your-token</code></pre>
+  app_secret: your-app-secret</code></pre>
+                        </div>
                     </div>
-                </div>
 
-                <div class="step">
-                    <div class="step-num">3</div>
-                    <div class="step-content">
-                        <h4>运行 Docker 容器</h4>
-                        <p>在文件夹中打开终端/命令行，运行：</p>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <h4>运行 Docker 容器</h4>
 <pre><code>docker run -d \
   --name openclaw \
   -p 8080:8080 \
   -v $(pwd)/config.yaml:/app/config.yaml \
-  -v openclaw_data:/app/data \
   justlovemaki/openclaw:latest</code></pre>
+                        </div>
                     </div>
-                </div>
 
-                <div class="step">
-                    <div class="step-num">4</div>
-                    <div class="step-content">
-                        <h4>验证安装</h4>
-                        <p>浏览器打开 <code>http://localhost:8080</code></p>
-                        <p>看到登录页面即表示成功！</p>
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <h4>访问 <code>http://localhost:8080</code></h4>
+                            <p>默认账号：admin / admin123</p>
+                        </div>
                     </div>
-                </div>
-
-                <div class="success-box">
-                    <strong>🎉 部署完成！</strong> 默认管理员账号 admin/admin123
                 </div>
             </div>
 
             <div class="card">
-                <h2>⚙️ 常见配置说明</h2>
+                <h2>🤖 支持的 LLM</h2>
+                <div class="feature-grid">
+                    <div class="feature-item">OpenAI GPT-4o</div>
+                    <div class="feature-item">Claude 3.5</div>
+                    <div class="feature-item">通义千问 Qwen</div>
+                    <div class="feature-item">DeepSeek</div>
+                    <div class="feature-item">Azure OpenAI</div>
+                    <div class="feature-item">Ollama 本地</div>
+                </div>
+            </div>
 
-                <h3>支持的 LLM 提供商</h3>
-                <ul>
-                    <li><strong>OpenAI</strong> - GPT-4o, GPT-4, GPT-3.5</li>
-                    <li><strong>Anthropic</strong> - Claude 3.5 Sonnet</li>
-                    <li><strong>Azure OpenAI</strong></li>
-                    <li><strong>Ollama</strong> - 本地开源模型</li>
-                    <li><strong>通义千问</strong> - 阿里云</li>
-                    <li><strong>DeepSeek</strong></li>
-                </ul>
+            <div class="card">
+                <h2>📱 IM 集成</h2>
 
-                <h3>飞书集成配置</h3>
+                <h3>飞书配置</h3>
                 <div class="info-box">
-                    1. 前往 <a href="https://open.feishu.cn/" target="_blank">飞书开放平台</a><br>
-                    2. 创建应用 → 开通权限: im:chat:message:send_as_bot<br>
-                    3. 发布应用 → 添加可用用户<br>
-                    4. 将 app_id 和 app_secret 填入配置
+                    1. <a href="https://open.feishu.cn/" target="_blank">飞书开放平台</a> 创建应用<br>
+                    2. 开通权限: im:chat:message:send_as_bot<br>
+                    3. 发布应用并添加可用用户
                 </div>
 
-                <h3>钉钉集成配置</h3>
+                <h3>钉钉配置</h3>
                 <div class="info-box">
-                    1. 前往 <a href="https://open.dingtalk.com/" target="_blank">钉钉开放平台</a><br>
-                    2. 创建企业内部应用 → 开通消息权限<br>
-                    3. 配置机器人 Webhook<br>
-                    4. 将相关凭证填入配置
+                    1. <a href="https://open.dingtalk.com/" target="_blank">钉钉开放平台</a> 创建应用<br>
+                    2. 开通消息权限<br>
+                    3. 配置机器人 Webhook
                 </div>
             </div>
         </div>
@@ -388,22 +580,24 @@ im:
         <div id="lobster" class="content">
             <div class="card">
                 <h2>🦞 什么是有道龙虾？</h2>
-                <p>有道龙虾 (LobsterAI) 是网易有道推出的 AI Agent 产品，开箱即用，无需复杂配置。支持多种大模型接入，可快速创建个人 AI 助手。</p>
+                <p>有道龙虾 (LobsterAI) 是网易有道推出的 AI Agent 产品，开箱即用，图形化界面友好，一键安装无需配置。</p>
 
-                <div class="warning-box">
-                    <strong>特点：</strong>图形化界面友好，一键部署，无需命令行经验
+                <div class="feature-grid">
+                    <div class="feature-item">一键安装</div>
+                    <div class="feature-item">图形界面</div>
+                    <div class="feature-item">多模型支持</div>
+                    <div class="feature-item">飞书/钉钉集成</div>
                 </div>
             </div>
 
             <div class="card">
-                <h2>🚀 Windows 一键安装</h2>
+                <h2>🚀 Windows 安装</h2>
 
                 <div class="step">
                     <div class="step-num">1</div>
                     <div class="step-content">
                         <h4>下载安装包</h4>
-                        <p>访问有道龙虾官网或各大技术博客获取下载链接</p>
-                        <p>下载 Windows 安装包 (.exe)</p>
+                        <p>从官网或技术博客获取下载链接</p>
                     </div>
                 </div>
 
@@ -411,8 +605,7 @@ im:
                     <div class="step-num">2</div>
                     <div class="step-content">
                         <h4>运行安装程序</h4>
-                        <p>双击安装包，按提示完成安装</p>
-                        <p>建议安装到 D:\LobsterAI 目录</p>
+                        <p>双击安装包，建议安装到 <code>D:\LobsterAI</code></p>
                     </div>
                 </div>
 
@@ -420,16 +613,14 @@ im:
                     <div class="step-num">3</div>
                     <div class="step-content">
                         <h4>启动服务</h4>
-                        <p>安装完成后会自动启动服务</p>
-                        <p>或在开始菜单找到"LobsterAI"点击启动</p>
+                        <p>开始菜单点击"LobsterAI"启动</p>
                     </div>
                 </div>
 
                 <div class="step">
                     <div class="step-num">4</div>
                     <div class="step-content">
-                        <h4>访问管理界面</h4>
-                        <p>浏览器打开 <code>http://localhost:8765</code></p>
+                        <h4>访问 <code>http://localhost:8765</code></h4>
                         <p>首次访问设置管理员账号</p>
                     </div>
                 </div>
@@ -442,11 +633,10 @@ im:
             <div class="card">
                 <h2>🤖 配置大模型</h2>
 
-                <h3>在界面中配置</h3>
                 <div class="step">
                     <div class="step-num">1</div>
                     <div class="step-content">
-                        <h4>进入设置页面</h4>
+                        <h4>进入设置</h4>
                         <p>点击左下角"设置"图标</p>
                     </div>
                 </div>
@@ -454,8 +644,8 @@ im:
                 <div class="step">
                     <div class="step-num">2</div>
                     <div class="step-content">
-                        <h4>选择模型提供商</h4>
-                        <p>支持：OpenAI、Anthropic、阿里通义、DeepSeek、Moonshot 等</p>
+                        <h4>选择模型</h4>
+                        <p>支持：OpenAI、Claude、通义千问、DeepSeek、Moonshot 等</p>
                     </div>
                 </div>
 
@@ -463,79 +653,87 @@ im:
                     <div class="step-num">3</div>
                     <div class="step-content">
                         <h4>填写 API Key</h4>
-                        <p>粘贴对应的 API Key</p>
-                        <p>可选择设置默认模型</p>
+                        <p>粘贴 API Key，选择默认模型</p>
                     </div>
                 </div>
-
-                <h3>支持的模型</h3>
-                <ul>
-                    <li><strong>GPT-4o / GPT-4</strong> - OpenAI</li>
-                    <li><strong>Claude 3.5</strong> - Anthropic</li>
-                    <li><strong>通义千问 Qwen</strong> - 阿里云</li>
-                    <li><strong>DeepSeek Chat</strong> - DeepSeek</li>
-                    <li><strong>Moonshot (月之暗面)</strong></li>
-                </ul>
             </div>
 
             <div class="card">
                 <h2>📱 集成飞书/钉钉</h2>
 
-                <h3>飞书集成</h3>
+                <h3>飞书</h3>
                 <div class="info-box">
-                    1. 设置 → 集成 → 飞书<br>
-                    2. 填写应用 App ID 和 App Secret<br>
-                    3. 开启消息接收<br>
-                    4. 在飞书中搜索并添加机器人为好友
+                    设置 → 集成 → 飞书 → 填写 App ID/Secret → 开启
                 </div>
 
-                <h3>钉钉集成</h3>
+                <h3>钉钉</h3>
                 <div class="info-box">
-                    1. 设置 → 集成 → 钉钉<br>
-                    2. 填写钉钉机器人的 AgentId 和 Secret<br>
-                    3. 开启接收消息<br>
-                    4. 在钉钉中添加机器人
+                    设置 → 集成 → 钉钉 → 填写 AgentId/Secret → 开启
                 </div>
             </div>
 
             <div class="card">
                 <h2>💡 常见问题</h2>
 
-                <h3>Q: 启动后无法访问？</h3>
-                <p>A: 检查防火墙设置，确保 8765 端口未被占用</p>
+                <h3>无法访问 localhost:8765？</h3>
+                <p>检查防火墙，确保端口未被占用</p>
 
-                <h3>Q: API 调用失败？</h3>
-                <p>A: 确认 API Key 正确，网络能访问对应服务商</p>
+                <h3>API 调用失败？</h3>
+                <p>确认 API Key 正确，网络能访问服务商</p>
 
-                <h3>Q: 如何更新版本？</h3>
-                <p>A: 下载新版本覆盖安装，或在设置中检查更新</p>
+                <h3>如何更新？</h3>
+                <p>下载新版本覆盖安装，或在设置中检查更新</p>
             </div>
         </div>
 
         <footer>
             <p>📚 更多教程持续更新中...</p>
-            <p>有问题？请查阅官方文档或提交 Issue</p>
+            <p>有问题？请查阅 <a href="https://openclaw.ai/" target="_blank">官方文档</a></p>
         </footer>
     </div>
 
     <script>
+        let currentMethod = 'oneclick';
+
+        function selectMethod(method) {
+            currentMethod = method;
+
+            // 更新卡片样式
+            document.querySelectorAll('.method-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.method-card').classList.add('selected');
+
+            // 显示对应内容
+            document.getElementById('oneclick-install').style.display = method === 'oneclick' ? 'block' : 'none';
+            document.getElementById('docker-install').style.display = method === 'docker' ? 'block' : 'none';
+        }
+
         function switchTab(tabId) {
-            // 隐藏所有内容
             document.querySelectorAll('.content').forEach(content => {
                 content.classList.remove('active');
             });
-
-            // 取消所有按钮的 active 状态
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-
-            // 显示选中的内容
             document.getElementById(tabId).classList.add('active');
-
-            // 激活对应按钮
             event.target.classList.add('active');
         }
+
+        // 复制代码功能
+        document.querySelectorAll('pre').forEach(pre => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = '复制';
+            btn.onclick = () => {
+                const code = pre.querySelector('code').textContent;
+                navigator.clipboard.writeText(code);
+                btn.textContent = '已复制!';
+                setTimeout(() => btn.textContent = '复制', 2000);
+            };
+            pre.style.position = 'relative';
+            pre.appendChild(btn);
+        });
     </script>
 </body>
 </html>
