@@ -359,6 +359,129 @@
             font-weight: bold;
         }
 
+        /* 配置生成器样式 */
+        .config-generator {
+            background: var(--card-bg-light);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        .config-generator h4 {
+            color: var(--text);
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-light);
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-light);
+            opacity: 0.6;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 500px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .optional-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .optional-toggle input {
+            width: auto;
+        }
+
+        .config-output {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .config-output pre {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .copy-all-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 16px;
+        }
+
+        .copy-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .copy-all-btn.copied {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        .im-config {
+            display: none;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .im-config.show {
+            display: block;
+        }
+
         footer {
             text-align: center;
             padding: 40px 20px;
@@ -505,28 +628,98 @@
                     <div class="step">
                         <div class="step-num">2</div>
                         <div class="step-content">
-                            <h4>创建配置文件</h4>
-                            <p>新建文件夹 <code>openclaw</code>，创建 <code>config.yaml</code>：</p>
-<pre><code>server:
+                            <h4>生成配置文件</h4>
+                            <p>在下方选择你的模型，填写 API Key，自动生成配置：</p>
+
+                            <div class="config-generator">
+                                <h4>⚙️ 配置生成器</h4>
+
+                                <div class="form-group">
+                                    <label>选择模型提供商</label>
+                                    <select id="llmProvider" onchange="updateConfig()">
+                                        <option value="openai">OpenAI (GPT-4o, GPT-4)</option>
+                                        <option value="anthropic">Anthropic (Claude)</option>
+                                        <option value="qwen">通义千问 (Qwen)</option>
+                                        <option value="deepseek">DeepSeek</option>
+                                        <option value="azure">Azure OpenAI</option>
+                                        <option value="ollama">Ollama (本地)</option>
+                                        <option value="moonshot">Moonshot (月之暗面)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>API Key</label>
+                                    <input type="password" id="apiKey" placeholder="输入你的 API Key" oninput="updateConfig()">
+                                </div>
+
+                                <div class="form-group" id="baseUrlGroup" style="display: none;">
+                                    <label>API Base URL (可选)</label>
+                                    <input type="text" id="baseUrl" placeholder="如使用代理填入" oninput="updateConfig()">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>选择模型</label>
+                                    <select id="modelName" onchange="updateConfig()">
+                                        <option value="gpt-4o-mini">GPT-4o Mini (推荐)</option>
+                                        <option value="gpt-4o">GPT-4o</option>
+                                        <option value="gpt-4">GPT-4</option>
+                                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                                    </select>
+                                </div>
+
+                                <label class="optional-toggle">
+                                    <input type="checkbox" id="enableIM" onchange="toggleIMConfig()">
+                                    配置飞书/钉钉集成
+                                </label>
+
+                                <div class="im-config" id="imConfig">
+                                    <div class="form-group">
+                                        <label>IM 类型</label>
+                                        <select id="imType" onchange="updateConfig()">
+                                            <option value="feishu">飞书</option>
+                                            <option value="dingtalk">钉钉</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>App ID / Agent ID</label>
+                                            <input type="text" id="imAppId" placeholder="应用 ID" oninput="updateConfig()">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>App Secret / Secret</label>
+                                            <input type="password" id="imAppSecret" placeholder="应用密钥" oninput="updateConfig()">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="verificationTokenGroup" style="display: none;">
+                                        <label>Verification Token</label>
+                                        <input type="text" id="verificationToken" placeholder="验证令牌" oninput="updateConfig()">
+                                    </div>
+                                </div>
+
+                                <div class="config-output">
+                                    <label style="display: block; margin-bottom: 8px; color: var(--text-light);">生成的配置文件：</label>
+                                    <pre><code id="configPreview">server:
   host: 0.0.0.0
   port: 8080
 
 llm:
   provider: openai
-  api_key: your-api-key
-  model: gpt-4o-mini
-
-im:
-  type: feishu
-  app_id: your-app-id
-  app_secret: your-app-secret</code></pre>
+  api_key: your-api-key-here
+  model: gpt-4o-mini</code></pre>
+                                    <button class="copy-all-btn" onclick="copyConfig()">
+                                        📋 一键复制配置文件
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="step">
                         <div class="step-num">3</div>
                         <div class="step-content">
-                            <h4>运行 Docker 容器</h4>
+                            <h4>保存并运行</h4>
+                            <p>1. 新建文件夹 <code>openclaw</code></p>
+                            <p>2. 创建 <code>config.yaml</code>，粘贴上方配置</p>
 <pre><code>docker run -d \
   --name openclaw \
   -p 8080:8080 \
@@ -722,6 +915,9 @@ im:
 
         // 复制代码功能
         document.querySelectorAll('pre').forEach(pre => {
+            // 跳过配置生成器的 pre
+            if (pre.parentElement.classList.contains('config-output')) return;
+
             const btn = document.createElement('button');
             btn.className = 'copy-btn';
             btn.textContent = '复制';
@@ -734,6 +930,151 @@ im:
             pre.style.position = 'relative';
             pre.appendChild(btn);
         });
+
+        // 模型配置
+        const modelOptions = {
+            openai: [
+                { value: 'gpt-4o-mini', text: 'GPT-4o Mini (推荐)' },
+                { value: 'gpt-4o', text: 'GPT-4o' },
+                { value: 'gpt-4', text: 'GPT-4' },
+                { value: 'gpt-3.5-turbo', text: 'GPT-3.5 Turbo' }
+            ],
+            anthropic: [
+                { value: 'claude-sonnet-4-20250514', text: 'Claude Sonnet 4 (推荐)' },
+                { value: 'claude-3-5-sonnet-20241022', text: 'Claude 3.5 Sonnet' },
+                { value: 'claude-3-opus-20240229', text: 'Claude 3 Opus' },
+                { value: 'claude-3-haiku-20240307', text: 'Claude 3 Haiku' }
+            ],
+            qwen: [
+                { value: 'qwen-plus', text: 'Qwen Plus (推荐)' },
+                { value: 'qwen-turbo', text: 'Qwen Turbo' },
+                { value: 'qwen-max', text: 'Qwen Max' },
+                { value: 'qwen-long', text: 'Qwen Long' }
+            ],
+            deepseek: [
+                { value: 'deepseek-chat', text: 'DeepSeek Chat (推荐)' },
+                { value: 'deepseek-coder', text: 'DeepSeek Coder' }
+            ],
+            azure: [
+                { value: 'gpt-4o-mini', text: 'GPT-4o Mini' },
+                { value: 'gpt-4', text: 'GPT-4' },
+                { value: 'gpt-35-turbo', text: 'GPT-3.5 Turbo' }
+            ],
+            ollama: [
+                { value: 'llama3', text: 'Llama 3' },
+                { value: 'mistral', text: 'Mistral' },
+                { value: 'codellama', text: 'CodeLlama' },
+                { value: 'qwen:7b', text: 'Qwen 7B' }
+            ],
+            moonshot: [
+                { value: 'moonshot-v1-8k', text: 'Moonshot V1 8K (推荐)' },
+                { value: 'moonshot-v1-32k', text: 'Moonshot V1 32K' },
+                { value: 'moonshot-v1-128k', text: 'Moonshot V1 128K' }
+            ]
+        };
+
+        // 更新模型下拉选项
+        function updateModelOptions() {
+            const provider = document.getElementById('llmProvider').value;
+            const modelSelect = document.getElementById('modelName');
+            const options = modelOptions[provider] || [];
+
+            modelSelect.innerHTML = options.map(opt =>
+                `<option value="${opt.value}">${opt.text}</option>`
+            ).join('');
+        }
+
+        // 显示/隐藏 Base URL
+        function updateBaseUrlVisibility() {
+            const provider = document.getElementById('llmProvider').value;
+            const showBaseUrl = ['azure', 'ollama'].includes(provider);
+            document.getElementById('baseUrlGroup').style.display = showBaseUrl ? 'block' : 'none';
+        }
+
+        // 显示/隐藏 IM 配置
+        function toggleIMConfig() {
+            const enabled = document.getElementById('enableIM').checked;
+            const imConfig = document.getElementById('imConfig');
+            const imType = document.getElementById('imType').value;
+
+            imConfig.classList.toggle('show', enabled);
+            document.getElementById('verificationTokenGroup').style.display = imType === 'dingtalk' ? 'block' : 'none';
+        }
+
+        // 生成配置文件
+        function updateConfig() {
+            const provider = document.getElementById('llmProvider').value;
+            const apiKey = document.getElementById('apiKey').value || 'your-api-key-here';
+            const baseUrl = document.getElementById('baseUrl').value;
+            const model = document.getElementById('modelName').value;
+            const enableIM = document.getElementById('enableIM').checked;
+            const imType = document.getElementById('imType').value;
+            const imAppId = document.getElementById('imAppId').value || 'your-app-id';
+            const imAppSecret = document.getElementById('imAppSecret').value || 'your-app-secret';
+            const verificationToken = document.getElementById('verificationToken').value || 'your-token';
+
+            let config = `server:
+  host: 0.0.0.0
+  port: 8080
+
+llm:
+  provider: ${provider}
+  api_key: ${apiKey}
+  model: ${model}`;
+
+            // 添加 base_url
+            if (baseUrl && ['azure', 'ollama'].includes(provider)) {
+                config += `
+  base_url: ${baseUrl}`;
+            }
+
+            // 添加 IM 配置
+            if (enableIM) {
+                config += `
+
+im:
+  type: ${imType}
+  app_id: ${imAppId}
+  app_secret: ${imAppSecret}`;
+
+                if (imType === 'dingtalk') {
+                    config += `
+  verification_token: ${verificationToken}`;
+                }
+            }
+
+            document.getElementById('configPreview').textContent = config;
+
+            // 更新模型选项
+            updateModelOptions();
+            updateBaseUrlVisibility();
+        }
+
+        // 复制配置文件
+        function copyConfig() {
+            const config = document.getElementById('configPreview').textContent;
+            navigator.clipboard.writeText(config);
+
+            const btn = document.querySelector('.copy-all-btn');
+            btn.textContent = '✅ 已复制!';
+            btn.classList.add('copied');
+
+            setTimeout(() => {
+                btn.textContent = '📋 一键复制配置文件';
+                btn.classList.remove('copied');
+            }, 2000);
+        }
+
+        // 初始化
+        document.getElementById('llmProvider').addEventListener('change', updateConfig);
+        document.getElementById('imType').addEventListener('change', () => {
+            const imType = document.getElementById('imType').value;
+            document.getElementById('verificationTokenGroup').style.display = imType === 'dingtalk' ? 'block' : 'none';
+            updateConfig();
+        });
+
+        // 页面加载时初始化模型选项
+        updateModelOptions();
     </script>
 </body>
 </html>
